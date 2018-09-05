@@ -84,6 +84,8 @@ def delete_attributes_by_name(object_string, keep_list):
         The cleaned XML object string.
     """
     
+    object_string = object_string.replace("*", "#");
+    
     attributes = re.findall(r' [^<|^"|^\']*?=["|\']', object_string)
     # print(attributes)
     attributes = [re.findall(r'[^ |^=]+', x) for x in attributes]
