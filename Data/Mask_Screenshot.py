@@ -18,15 +18,20 @@ def mask_and_save_image(box):
     
     global count
     
-    im = Image.open(dir_name + "/" + img_name)
-    img_names = img_name.split('.')
-    region=im.crop(box)
+    width = box[2]-box[0]
+    height = box[3]-box[1]
+    
+    if width >= 0 and height >= 0:
+    
+        im = Image.open(dir_name + "/" + img_name)
+        img_names = img_name.split('.')
+        region=im.crop(box)
 
-    mask = Image.new("RGBA",(box[2]-box[0],box[3]-box[1]),(255,255,255))
+        mask = Image.new("RGBA",(width,height),(255,255,255))
 
-    im.paste(mask,box)
-    im.save(save_dir +  img_names[0] + "-mask_" + str(count) + "-" + str(box) + "." + img_names[1])
-    count += 1
+        im.paste(mask,box)
+        im.save(save_dir +  img_names[0] + "-mask_" + str(count) + "-" + str(box) + "." + img_names[1])
+        count += 1
     
 # Find node recursively
 def find_all_element_by_attribute(node, element_name, attribute, find):
