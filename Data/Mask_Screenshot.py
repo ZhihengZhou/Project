@@ -94,7 +94,11 @@ def delete_attributes_by_name(object_string, keep_list):
     
     for attr in attributes:
         sub_attr = " " + attr[0] + "=" + attr[1] + ".*?" + attr[1]
-        object_string = re.sub(sub_attr, "", object_string)
+        try:
+            object_string = re.sub(sub_attr, "", object_string)
+        except Exception:
+            pass
+
     # print(object_string)
     return object_string
 
