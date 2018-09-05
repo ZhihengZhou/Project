@@ -5,6 +5,7 @@ import xml.etree.cElementTree as ET
 import re
 import hashlib
 from skimage import transform
+import progressbar
     
 def mask_and_save_image(box):
     """
@@ -95,7 +96,9 @@ output_dir = "../Masked/"
 if not os.path.exists(output_dir):
     os.mkdir(output_dir)
     
-
+# Progressbar
+Max = 50000
+pbar = progressbar.ProgressBar(maxval = Max).start()
 
 image_count = 0
 for app_dir in dirs:
@@ -144,7 +147,8 @@ for app_dir in dirs:
                 img.save(save_dir + i)
             
             image_count += 1
-            if image_count >= 10000:
+            pbar.update(image_count)
+            if image_count >= Max:
                 break
         elif len(xml_name) > 1:
             print(app_name, xml_name, "==============================================>")
