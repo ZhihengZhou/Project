@@ -111,10 +111,12 @@ if not os.path.exists(output_dir):
     os.mkdir(output_dir)
     
 # Progressbar
-Max = 50000
+Max = 100
 pbar = progressbar.ProgressBar(maxval = Max).start()
 
 image_count = 0
+break_tag = False
+
 for app_dir in dirs:
     app_name = app_dir.split("-")[0]
     dir_name = os.path.join(app_dir, "stoat_fsm_output", "ui")
@@ -163,8 +165,12 @@ for app_dir in dirs:
             image_count += 1
             pbar.update(image_count)
             if image_count >= Max:
+                break_tag = True
                 break
         elif len(xml_name) > 1:
             print(app_name, xml_name, "==============================================>")
+
+    if break_tag:
+        break
 
 print("Have masked " + str(image_count) + " screenshots!")
