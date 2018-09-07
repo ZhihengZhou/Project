@@ -12,6 +12,8 @@ ratio = 0.95
 image_size1 = 160
 image_size2 = 256
 
+max_elements = 100
+
 x = []
 paths = glob.glob('./Masked/*')
 
@@ -34,14 +36,14 @@ for path in pbar(paths):
         img1 = Image.open(os.path.join(path, img_original))
         img1 = img1.resize((image_size1, image_size2), Image.ANTIALIAS)
         img1 = (np.array(img1))
-        #img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
+        # img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
         
-        img2 = Image.open(os.path.join(path, img_masked))
-        img2 = img2.resize((image_size1, image_size2), Image.ANTIALIAS)
-        img2 = (np.array(img2))
-        #img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
-        
-        x.append((img1, img2, mask_bounds))
+#         img2 = Image.open(os.path.join(path, img_masked))
+#         img2 = img2.resize((image_size1, image_size2), Image.ANTIALIAS)
+#         img2 = (np.array(img2))
+#         # img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
+
+        x.append((img1, mask_bounds))
 
 
 x = np.array(x)
@@ -53,8 +55,15 @@ x_test = x[p:]
 
 if not os.path.exists('./npy'):
     os.mkdir('./npy')
-np.save('./npy/x_train.npy', x_train)
 np.save('./npy/x_test.npy', x_test)
+
+if len(x_train) > max_elements:
+    for count in range(int(len(x_train)/max_elements)):
+        np.save('./npy/x_train_' + str(count) + '.npy', x_train[count*max_elements : (count+1)*max_elements])
+    np.save('./npy/x_train_' + str(count+1) + '.npy', x_train[(count+1)*max_elements :])
+else:
+    np.save('./npy/x_train.npy', x_train)
 
 pbar.finish()
 
+print("Done.")
