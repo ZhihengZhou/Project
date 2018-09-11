@@ -105,7 +105,8 @@ def delete_attributes_by_name(object_string, keep_list):
     return object_string
 
 # Main
-filenames = os.listdir("./UIdata")
+os.chdir("./UIdata") 
+filenames = os.listdir("./")
 dirs = [d for d in filenames if "-output" in d]
 
 output_dir = "./Masked/"
