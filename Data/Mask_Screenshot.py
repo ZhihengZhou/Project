@@ -31,6 +31,8 @@ def mask_and_save_image(box):
             mask = Image.new("RGBA",(width,height),(255,255,255))
 
             im.paste(mask,box)
+            im = im.crop((0,0,800,1216))
+            
             im.save(save_dir +  img_names[0] + "-mask_" + str(count) + "-" + str(box) + "." + img_names[1])
             count += 1
         except Exception:
@@ -106,17 +108,16 @@ def delete_attributes_by_name(object_string, keep_list):
 filenames = os.listdir("./")
 dirs = [d for d in filenames if "-output" in d]
 
-output_dir = "../Masked/"
+output_dir = "./Masked/"
 if not os.path.exists(output_dir):
     os.mkdir(output_dir)
     
 # Progressbar
-Max = 100
+Max = 50000
 pbar = progressbar.ProgressBar(maxval = Max).start()
 
 image_count = 0
-break_tag = False
-
+masked_count = 0
 for app_dir in dirs:
     app_name = app_dir.split("-")[0]
     dir_name = os.path.join(app_dir, "stoat_fsm_output", "ui")
@@ -160,17 +161,15 @@ for app_dir in dirs:
             # Save original image
             if count > 0:
                 img = Image.open(dir_name + "/" + i)
+                img = img.crop((0,0,800,1216))
                 img.save(save_dir + i)
-            
-            image_count += 1
+                image_count += 1
+                masked_count += count
+                
             pbar.update(image_count)
             if image_count >= Max:
-                break_tag = True
                 break
         elif len(xml_name) > 1:
             print(app_name, xml_name, "==============================================>")
 
-    if break_tag:
-        break
-
-print("Have masked " + str(image_count) + " screenshots!")
+print("Have masked " + str(image_count) + " screenshots, gets " + str(masked_count) + " masked screenshots.")
