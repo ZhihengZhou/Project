@@ -105,7 +105,7 @@ def delete_attributes_by_name(object_string, keep_list):
     return object_string
 
 # Main
-filenames = os.listdir("./")
+filenames = os.listdir("./UIdata")
 dirs = [d for d in filenames if "-output" in d]
 
 output_dir = "./Masked/"
@@ -113,7 +113,7 @@ if not os.path.exists(output_dir):
     os.mkdir(output_dir)
     
 # Progressbar
-Max = 50000
+Max = 20000
 pbar = progressbar.ProgressBar(maxval = Max).start()
 
 image_count = 0
