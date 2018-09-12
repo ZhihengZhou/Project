@@ -131,7 +131,7 @@ while True:
     else:
         g_loss_value = 0
         d_loss_value = 0
-        for i in tqdm.tqdm(range(1)):
+        for i in tqdm.tqdm(range(step_num)):
             train_batch = train_data[i * BATCH_SIZE:(i + 1) * BATCH_SIZE]
             x_batch = np.array([i[0] for i in train_batch])
             x_batch = np.array([a / 127.5 - 1 for a in x_batch])
