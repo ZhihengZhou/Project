@@ -7,6 +7,41 @@ from layer import *
 from network import *
 from load import *
 
+def get_points(bounds):
+    points = []
+    mask = []
+    for b in bounds:
+        
+        mid_y = (b[0] + b[2])/2
+        mid_x = (b[1] + b[3])/2
+        
+        x1 = int(mid_x - LOCAL_SIZE/2)
+        if x1 < 0:
+            x1 = 0
+        elif x1 > IMAGE_SIZE1 - LOCAL_SIZE:
+            x1 = IMAGE_SIZE1 - LOCAL_SIZE
+        
+        y1 = int(mid_y - LOCAL_SIZE/2)
+        if y1 < 0:
+            y1 = 0
+        elif y1 > IMAGE_SIZE2 - LOCAL_SIZE:
+            y1 = IMAGE_SIZE2 - LOCAL_SIZE
+    
+        x2, y2 = np.array([x1, y1]) + LOCAL_SIZE
+        points.append([x1, y1, x2, y2])
+        
+        p1 = b[0]
+        q1 = b[1]
+        p2 = b[2]
+        q2 = b[3]
+        
+        m = np.zeros((IMAGE_SIZE1, IMAGE_SIZE2, 1), dtype=np.uint8)
+        m[q1:q2 + 1, p1:p2 + 1] = 1
+        mask.append(m)
+    
+    
+    return np.array(points), np.array(mask)
+
 # Hyperparameters
 IMAGE_SIZE2 = 160
 IMAGE_SIZE1 = 256
@@ -52,6 +87,7 @@ test_mask_bounds = np.array([i[1] for i in test_data])
 
 step_num = int(len(train_data) / BATCH_SIZE)
 
+# Load model
 if tf.train.get_checkpoint_state('./backup'):
     saver = tf.train.Saver()
     saver.restore(sess, './backup/latest')
@@ -133,48 +169,6 @@ while True:
         
         saver = tf.train.Saver()
         saver.save(sess, './backup/latest', write_meta_graph=False)
-
-
-
-
-
-
-def get_points(bounds):
-    points = []
-    mask = []
-    for b in bounds:
-        
-        mid_y = (b[0] + b[2])/2
-        mid_x = (b[1] + b[3])/2
-        
-        x1 = int(mid_x - LOCAL_SIZE/2)
-        if x1 < 0:
-            x1 = 0
-        elif x1 > IMAGE_SIZE1 - LOCAL_SIZE:
-            x1 = IMAGE_SIZE1 - LOCAL_SIZE
-        
-        y1 = int(mid_y - LOCAL_SIZE/2)
-        if y1 < 0:
-            y1 = 0
-        elif y1 > IMAGE_SIZE2 - LOCAL_SIZE:
-            y1 = IMAGE_SIZE2 - LOCAL_SIZE
-    
-        x2, y2 = np.array([x1, y1]) + LOCAL_SIZE
-        points.append([x1, y1, x2, y2])
-        
-        p1 = b[0]
-        q1 = b[1]
-        p2 = b[2]
-        q2 = b[3]
-        
-        m = np.zeros((IMAGE_SIZE1, IMAGE_SIZE2, 1), dtype=np.uint8)
-        m[q1:q2 + 1, p1:p2 + 1] = 1
-        mask.append(m)
-    
-    
-    return np.array(points), np.array(mask)
-
-
 
 #if __name__ == '__main__':
 #    x_train, x_test = load()

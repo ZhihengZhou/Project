@@ -1,7 +1,7 @@
 import os
 import numpy as np
 
-def load(dir_='../data/npy'):
+def load(dir_='../data／UIdata/npy'):
     files = os.listdir(dir_)
     train_files = [x for x in files if "train" in x]
     test_files = [x for x in files if "test" in x]
@@ -15,4 +15,3 @@ def load(dir_='../data/npy'):
         x_test.append(np.load(os.path.join(dir_, f)))
     
     return np.vstack(x_train), np.vstack(x_test)
-
