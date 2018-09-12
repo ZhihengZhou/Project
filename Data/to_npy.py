@@ -12,10 +12,13 @@ ratio = 0.95
 image_size1 = 160
 image_size2 = 256
 
-max_elements = 100
+max_elements = 20000
 
 x = []
-paths = glob.glob('./Masked/*')
+
+os.chdir("./UIdata/Masked/") 
+paths = os.listdir('./')
+paths = [d for d in paths if not os.path.isfile(d)]
 
 pbar = progressbar.ProgressBar()
 
@@ -53,9 +56,17 @@ p = int(ratio * len(x))
 x_train = x[:p]
 x_test = x[p:]
 
+os.chdir("../") 
+
 if not os.path.exists('./npy'):
     os.mkdir('./npy')
-np.save('./npy/x_test.npy', x_test)
+    
+if len(x_test) > max_elements:
+    for count in range(int(len(x_test)/max_elements)):
+        np.save('./npy/x_test_' + str(count) + '.npy', x_test[count*max_elements : (count+1)*max_elements])
+    np.save('./npy/x_test_' + str(count+1) + '.npy', x_train[(count+1)*max_elements :])
+else:
+    np.save('./npy/x_test.npy', x_test)
 
 if len(x_train) > max_elements:
     for count in range(int(len(x_train)/max_elements)):
