@@ -1,7 +1,7 @@
 import os
 import numpy as np
 
-def load(dir_='../data／UIdata/npy'):
+def load(dir_='../Data／UIdata/npy'):
     files = os.listdir(dir_)
     train_files = [x for x in files if "train" in x]
     test_files = [x for x in files if "test" in x]
