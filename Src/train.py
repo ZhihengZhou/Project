@@ -91,7 +91,7 @@ step_num = int(len(train_data) / BATCH_SIZE)
 # Load model
 if tf.train.get_checkpoint_state('./backup'):
     saver = tf.train.Saver()
-    saver.restore(sess, './backup/latest')
+    saver.restore(sess, './backup/pretrained')
 
 while True:
     sess.run(tf.assign(epoch, tf.add(epoch, 1)))
