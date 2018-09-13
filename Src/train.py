@@ -12,6 +12,7 @@ def get_points(bounds):
     mask = []
     for b in bounds:
         
+        b = [int(x) for x in b]
         mid_y = (b[0] + b[2])/2
         mid_x = (b[1] + b[3])/2
         
