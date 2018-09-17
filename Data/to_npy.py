@@ -33,7 +33,15 @@ for path in pbar(paths):
         img_original = [i for i in imgs_original if i.split(".")[0] == img_id][0]
         mask_bounds = img_masked.split("-")[-1].split(".")[0]
         mask_bounds = re.findall(r'(\w*[0-9]+)\w*',mask_bounds)
-        mask_bounds = [int(int(i)/5) for i in mask_bounds]
+        mask_bounds = [float(i) for i in mask_bounds]
+        
+        mask_bounds[1] = mask_bounds[1] + (mask_bounds[1]/1280)*(1280-1216)
+        mask_bounds[3] = mask_bounds[3] + (mask_bounds[3]/1280)*(1280-1216)
+
+#        mask_bounds[1] = mask_bounds[1]*1280/1216
+#        mask_bounds[3] = mask_bounds[3]*1280/1216
+
+        mask_bounds = [int(i/5) for i in mask_bounds]
         mask_bounds = np.array(mask_bounds, dtype=np.uint8)
 
         img1 = Image.open(os.path.join(path, img_original))
@@ -50,7 +58,7 @@ for path in pbar(paths):
 
 
 x = np.array(x)
-# np.random.shuffle(x)
+np.random.shuffle(x)
 
 p = int(ratio * len(x))
 x_train = x[:p]
